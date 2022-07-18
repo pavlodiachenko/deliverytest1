@@ -1,0 +1,23 @@
+<div class="sidenav">
+  <div class="logo"><a href="/">Delivery</a></div>
+  <a href="/McDonalds" class="sidenav-item" id="McDonalds">McDonalds</a>
+  <a href="/KFC" class="sidenav-item" id="KFC">KFC</a>
+  <a href="/Burger_King" class="sidenav-item" id="Burger_King">Burger King</a>
+</div>
+<script>
+  if (localStorage.length > 0) {
+    [...document.querySelectorAll(".sidenav-item")].forEach((nav) => {
+      if (getCookie("shop") !== nav.id) {
+        nav.href = "javascript: void(0)";
+      } else {
+        nav.classList.add("active");
+      }
+    });
+    function getCookie(name) {
+      var match = document.cookie.match(
+        new RegExp("(^| )" + name + "=([^;]+)")
+      );
+      if (match) return match[2];
+    }
+  }
+</script>

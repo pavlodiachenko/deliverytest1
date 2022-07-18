@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart</title>
+    <link rel="stylesheet" href="css/cart.css" />
+  </head>
+  <body>
+    <div id="navbar" class="sticky">
+      <a id="cart" href="/cart" class="active">Cart</a>
+      <a href="/">Home</a>
+    </div>
+    <form action="/" method="post">
+      <div id="form" class="form" action="">
+        <div class="form-container">
+          <h2>Enter details</h2>
+          <input
+            name="name"
+            class="input"
+            type="text"
+            placeholder="name"
+            required
+          />
+          <input
+            name="email"
+            class="input"
+            type="email"
+            placeholder="email"
+            required
+          />
+          <input
+            name="tel"
+            class="input"
+            type="tel"
+            placeholder="phone"
+            required
+          />
+          <input
+            name="address"
+            class="input"
+            type="text"
+            placeholder="address"
+            required
+          />
+          <input type="hidden" name="shop" value="<%= products[0].shop %>" />
+        </div>
+        <div class="card-container">
+          <% products.forEach(function(item) { if(cookies[item.id]){%>
+          <div class="card">
+            <img
+              src="<%= item.img %>"
+              alt="<%= item.img %>"
+              style="width: 100%"
+            />
+            <div class="description" id="<%=item.id%>">
+              <h4><%= item.name %></h4>
+              <p class="price-wrap">
+                <input disabled="true" class="price" value="<%= item.price%>" />
+                <span class="dollar">$</span>
+              </p>
+              <input
+                name="<%= item.id %>"
+                class="item-number-input"
+                type="number"
+                min="1"
+                value="<%= cookies[item.id] %>"
+              />
+              <button class="delete">Delete</button>
+            </div>
+          </div>
+
+          <% }}); %>
+        </div>
+      </div>
+      <h1 id="totalPrice"></h1>
+      <button id="submit" class="btn-product" type="submit">Confirm</button>
+    </form>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        price();
+      });
+
+      [...document.querySelectorAll(".item-number-input")].forEach((item) => {
+        item.addEventListener("change", (event) => {
+          localStorage.setItem(event.target.parentNode.id, event.target.value);
+          document.cookie = `${
+            event.target.parentNode.id
+          }=${localStorage.getItem(event.target.parentNode.id)}`;
+          price();
+        });
+      });
+      [...document.querySelectorAll(".delete")].forEach((item) => {
+        item.addEventListener("click", (event) => {
+          localStorage.removeItem(event.target.parentNode.id);
+          document.cookie = `${event.target.parentNode.id}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+          event.target.parentNode.parentNode.remove();
+          event.preventDefault();
+          if (localStorage.length == 0) {
+            location.href = "/";
+          }
+        });
+      });
+      function price() {
+        totalPrice.innerText =
+          [...document.querySelectorAll(".description")]
+            .reduce((sum, item) => {
+              return (sum +=
+                +item.querySelector(".price").value *
+                +item.querySelector(".item-number-input").value);
+            }, 0)
+            .toFixed(2) + "$";
+      }
+
+      submit.addEventListener("click", () => {
+        document.cookie.split(";").forEach(function (c) {
+          document.cookie = c
+            .replace(/^ +/, "")
+            .replace(
+              /=.*/,
+              "=;expires=" + new Date().toUTCString() + ";path=/"
+            );
+        });
+        localStorage.clear();
+      });
+    </script>
+  </body>
+</html>

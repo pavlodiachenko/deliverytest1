@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Delivery</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <%- include('navbar') -%> <%- include('sidebar') -%>
+    <div class = 'container'>
+            
+        <% products.forEach(function(item) { %>
+       
+       <div class = 'card'>
+       <img src="<%= item.img %>" alt="<%= item.img %>"  style="width:100%"> 
+       <div class="description">
+       <h4><%= item.name %></h4>
+       <p><%= item.price %>$</p>
+       <button id = '<%=item.id%>' class="btn-product" onClick="window.location.href=window.location.href"> Buy </button>
+      </div>
+    </div>
+        <% }); %>
+      
+        </div>
+    </main>
+    
+    <script>
+      [...document.querySelectorAll(".btn-product")].forEach((item) => {
+        item.addEventListener("click", (event) => {
+          document.cookie = `shop=${window.location.pathname.slice(1, )}`
+          if (+localStorage.getItem(event.target.id) > 0) {
+            localStorage.setItem(event.target.id, +localStorage.getItem(event.target.id) + 1);
+            document.cookie = `${event.target.id}=${localStorage.getItem(event.target.id)}`
+          } else {
+            localStorage.setItem(event.target.id, 1);
+            document.cookie = `${event.target.id}=${localStorage.getItem(event.target.id)}`
+          }
+        });
+      });
+      
+    </script>
+  </body>
+</html>

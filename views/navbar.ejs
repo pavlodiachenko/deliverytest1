@@ -1,0 +1,14 @@
+<div id="navbar" class="sticky">
+  <a id="cart" href="/cart" }></a>
+  <a href="/">Home</a>
+</div>
+<script>
+  let l;
+  if (localStorage.length == 0) {
+    l = 0;
+    cart.href = "javascript: void(0)";
+  } else {
+    l = localStorage.length;
+  }
+  cart.innerText = "Cart (" + l + ")";
+</script>
